@@ -3,18 +3,14 @@ import Card from "antd/es/card/Card";
 import styles from "./FormInput.module.scss";
 import classNames from "classnames/bind";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { login, signUp } from "../../redux/slice/authSlice";
 
 const cx = classNames.bind(styles);
 
-function FormInput({ label, children }) {
+function FormInput({ actionType, onSubmit, children }) {
   const rules = {
     userName: [{ required: true, message: "Vui lòng nhập tên của bạn!" }],
     password: [{ required: true, message: "Vui lòng nhập mật khẩu!" }],
   };
-
-  const dispatch = useDispatch();
 
   const [account, setAccount] = useState({});
 
@@ -22,10 +18,9 @@ function FormInput({ label, children }) {
     setAccount(allValues);
   }
 
-  const handleChange = () => {
-    label === "Đăng nhập" ? dispatch(login(account)) : dispatch(signUp(account))
+  const handleSubmit = () => {
+    onSubmit(account)
   };
-
 
   return (
     <div className={cx("wrapper")}>
@@ -38,9 +33,9 @@ function FormInput({ label, children }) {
           initialValues={{ remember: true }}
           autoComplete="off"
           onValuesChange={change}
-          onFinish={handleChange}
+          onFinish={handleSubmit}
         >
-          <Form.Item label="Username" name="username" rules={rules.userName}>
+          <Form.Item label="Username" name="email" rules={rules.userName}>
             <Input />
           </Form.Item>
           <Form.Item label="Password" name="password" rules={rules.password}>
@@ -52,7 +47,7 @@ function FormInput({ label, children }) {
               type="primary"
               htmlType="submit"
             >
-              {label}
+              {actionType}
             </Button>
           </Form.Item>
         </Form>

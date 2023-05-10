@@ -5,66 +5,57 @@ const initialState = {
     message: null,
     user: null,
     loading: false,
-    accessToken: null,
-    error: null,
+    token: null,
+    error: null
 }
 
 export const login = createAsyncThunk('login', async (data) => {
-    const res = await axios.post('http://localhost:8081/api/auth/login', data)
-    return await res.json();
+    const res = await axios.post('http://localhost:8081/api/users/users/login', data)
+    return await res.data;
 })
 
 export const signUp = createAsyncThunk('signUp', async (data) => {
     const res = await axios.post('http://localhost:8081/api/auth/register', data)
-    return await res.json();
+    return await res.data;
 })
 
 const authSlice = createSlice({
-    name: 'user',
+    name: 'authSlice',
     initialState,
-    reducers: {
-        logout: (state, action) => {
-            state.accessToken = null;
-            localStorage.clear();
-        }
-    },
-    extraReducers: {
-        [login.pending]: (state, action) => {
+    reducers: {},
+    extraReducers: (builder) => {
+        builder
+          .addCase(login.pending, (state) => {
             state.loading = true;
-        },
-        [login.fulfilled]: (state, { payload: { message, user, accessToken, error } }) => {
+            state.error = null;
+          })
+          .addCase(login.fulfilled, (state, action) => {
             state.loading = false;
-            if(error) {
-                state.error = error;
-            } else {
-                state.message = message;
-                state.user = user;
-                state.accessToken = accessToken;
-
-                localStorage.setItem('message', message);
-                localStorage.setItem('user', user.stringify());
-                localStorage.setItem('accessToken', accessToken);
-            }
-        },
-        [login.rejected]: (state, action) => {
+            state.token = action.payload.token;
+            localStorage.setItem('token', action.payload.token)
+            localStorage.setItem('user', JSON.stringify(action.payload.userInfo));
+          })
+          .addCase(login.rejected, (state, action) => {
             state.loading = false;
-        },
-        // dang ky
-        [signUp.pending]: (state, action) => {
+            state.error = action.error.message;
+          })
+        //   dang ky
+          .addCase(signUp.pending, (state) => {
             state.loading = true;
-        },
-        [signUp.fulfilled]: (state, { payload: {message, error} }) => {
-            state.loading = false;
-            if(error) {
-                state.error = error;
+            state.error = null;
+          })
+          .addCase(signUp.fulfilled, (state, action) => {
+            if(action.payload.error) {
+                state.error = action.payload.error;
             } else {
-                state.message = message;
+                state.message = action.payload.message;
             }
-        },
-        [signUp.rejected]: (state, action) => {
+          })
+          .addCase(signUp.rejected, (state, action) =>{
             state.loading = false;
-        }
-    }
+            state.error = action.error.message;
+          })
+      },
 })
 
-export default authSlice.reducer;
+export default authSlice;
