@@ -24,12 +24,12 @@ function FormInput({ actionType, onSubmit, children }) {
 
   return (
     <div className={cx("wrapper")}>
-      <Card title="CONG CHAT APP" style={{ width: "50%", textAlign: "center" }}>
+      <Card title="CONG CHAT APP" style={{ width: '50%', textAlign: 'center' }}>
         <Form
           name="basic"
-          labelCol={{ span: 8 }}
+          labelCol={{ span: 6 }}
           wrapperCol={{ span: 16 }}
-          style={{ maxWidth: 600 }}
+          style={{ maxWidth: '100%' }}
           initialValues={{ remember: true }}
           autoComplete="off"
           onValuesChange={change}
@@ -41,15 +41,14 @@ function FormInput({ actionType, onSubmit, children }) {
           <Form.Item label="Password" name="password" rules={rules.password}>
             <Input.Password />
           </Form.Item>
-          {children}
-          <Form.Item>
+          {children}<br/>
             <Button
               type="primary"
               htmlType="submit"
+              style={{ width: '50%' }}
             >
               {actionType}
             </Button>
-          </Form.Item>
         </Form>
       </Card>
     </div>
