@@ -1,8 +1,12 @@
 import { Avatar, Space, Badge } from "antd";
+import classNames from "classnames/bind";
+import styles from './UserItem.module.scss'
 
-function UserItem() {
+const cx = classNames.bind(styles)
+
+function UserItem({ children }) {
   return (
-    <div>
+    <div className={cx('user-item')}>
       <Space>
           <Badge offset={[-4, 36]} dot color="green">
             <Avatar
@@ -16,8 +20,7 @@ function UserItem() {
             </Avatar>
           </Badge>
           <div>
-            Trần Thế Công<br/>
-            Hải phòng
+            {children}
           </div>
       </Space>
     </div>

@@ -24,7 +24,7 @@ function FormInput({ actionType, onSubmit, children }) {
 
   return (
     <div className={cx("wrapper")}>
-      <Card title="CONG CHAT APP" style={{ width: '50%', textAlign: 'center' }}>
+      <Card title="CONG CHAT APP" style={{ width: '35%', textAlign: 'center' }}>
         <Form
           name="basic"
           labelCol={{ span: 6 }}
@@ -35,7 +35,7 @@ function FormInput({ actionType, onSubmit, children }) {
           onValuesChange={change}
           onFinish={handleSubmit}
         >
-          <Form.Item label="Username" name="email" rules={rules.userName}>
+          <Form.Item label="Username" name="username" rules={rules.userName}>
             <Input />
           </Form.Item>
           <Form.Item label="Password" name="password" rules={rules.password}>

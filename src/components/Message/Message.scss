@@ -1,0 +1,20 @@
+
+.my-mess {
+    float: right;
+    clear: both;
+    margin: 5px 10px 15px 0;
+}
+
+.other-mess {
+    float: left;
+    clear: both;
+    margin: 0 10px 10px 0;
+}
+
+.message {
+    display: block;
+    padding: 5px 10px;
+    background-color: lightblue;
+    border-radius: 15px;
+    word-break: break-all;
+}

@@ -10,7 +10,7 @@ const initialState = {
 }
 
 export const login = createAsyncThunk('login', async (data) => {
-    const res = await axios.post('http://localhost:8081/api/users/users/login', data)
+    const res = await axios.post('http://localhost:8081/api/auth/login', data)
     return await res.data;
 })
 
@@ -20,7 +20,7 @@ export const signUp = createAsyncThunk('signUp', async (data) => {
 })
 
 const authSlice = createSlice({
-    name: 'authSlice',
+    name: 'auth',
     initialState,
     reducers: {},
     extraReducers: (builder) => {
@@ -31,8 +31,8 @@ const authSlice = createSlice({
           })
           .addCase(login.fulfilled, (state, action) => {
             state.loading = false;
-            state.token = action.payload.token;
-            localStorage.setItem('token', action.payload.token)
+            state.token = action.payload.accessToken;
+            localStorage.setItem('token', action.payload.accessToken)
             localStorage.setItem('user', JSON.stringify(action.payload.userInfo));
           })
           .addCase(login.rejected, (state, action) => {

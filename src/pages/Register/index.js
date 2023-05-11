@@ -17,7 +17,7 @@ function Register() {
     <div>
       <FormInput onSubmit={handleSignUp} actionType="Đăng ký">
         <Form.Item
-          label="Confirm Password"
+          label="Confirm Pass"
           name="confirmPassword"
           rules={[
             {
