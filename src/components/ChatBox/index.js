@@ -1,10 +1,11 @@
 import { Input, Layout } from "antd";
 import { useState } from "react";
-import { SendOutlined } from "@ant-design/icons"
+import { SendOutlined } from "@ant-design/icons";
+import "../../styles/_chatBox.scss";
 
 const { Content } = Layout;
 
-function ChatBox({ style, children, onSend }) {
+function ChatBox({ children, onSend }) {
 
     const [message, setMessage] = useState('')
     
@@ -13,19 +14,18 @@ function ChatBox({ style, children, onSend }) {
     }
 
     const handleSend = (e) => {
-        e.preventDefault();
         onSend(message);
         setMessage('');
     }
 
     return ( 
-        <div style={style}>
-            <Layout style={{ height: '100%' }}>
-                <Content style={{ padding: '15px', display: 'flex', flexFlow: "column" }}>
-                    <div style={{ height: '90%' , overflowY: 'scroll' }}>
+        <div className="chatBox">
+            <Layout className="chatBox-layout">
+                <Content className="chatBox-content">
+                    <div className="chatBox-children">
                         {children}
                     </div>
-                    <div style={{ height: '10%' ,display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                    <div className="chatBox-input">
                         <Input value={message} onChange={handleChange} onPressEnter={handleSend} style={{ marginRight: '10px'}} />
                         <SendOutlined onClick={handleSend} />
                     </div>

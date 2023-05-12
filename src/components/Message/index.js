@@ -1,4 +1,4 @@
-import './Message.scss'
+import '../../styles/_message.scss';
 
 function Message({ mess, className }) {
     return ( 

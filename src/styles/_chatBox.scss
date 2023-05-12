@@ -1,0 +1,25 @@
+.chatBox {
+    width: 50%;
+    height: 60%;
+    .chatBox-layout {
+        height: 100%;
+        .chatBox-content {
+            padding: 15px;
+            display: flex; 
+            flex-flow: column;
+            background-color: #fff;
+            background-repeat: repeat;
+            background-size: cover;
+            .chatBox-children {
+                height: 90%; 
+                overflow-y: scroll;
+            }
+            .chatBox-input {
+                height: 10%;
+                display: flex; 
+                justify-content: center; 
+                align-items: center;
+            }
+        }
+    }
+}

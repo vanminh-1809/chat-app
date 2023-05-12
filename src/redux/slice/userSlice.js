@@ -7,8 +7,13 @@ const initialState = {
     error: null
 }
 
-export const getAllUsers = createAsyncThunk('users/getAll', async () => {
-    const res = await axios.get('http://localhost:8081/api/user')
+export const getUsersByRoomId = createAsyncThunk('users/getAll', async (id) => {
+    const res = await axios.get(`http://localhost:8081/api/chat/${id}`);
+    return res.data;
+})
+
+export const addUserRoom = createAsyncThunk('users/add', async (id, data) => {
+    const res = await axios.put(`http://localhost:8081/api/chat/${id}`, data);
     return res.data;
 })
 
@@ -18,14 +23,25 @@ const userSlice = createSlice({
     reducers: {},
     extraReducers: (builder) => {
         builder
-            .addCase(getAllUsers.pending, (state) => {
+            .addCase(getUsersByRoomId.pending, (state) => {
                 state.loading = true;
             })
-            .addCase(getAllUsers.fulfilled, (state, action) => {
+            .addCase(getUsersByRoomId.fulfilled, (state, action) => {
                 state.loading = false;
-                state.users = [...action.payload.data];
+                state.users = [...action.payload.chat];
             })
-            .addCase(getAllUsers.rejected, (state, action) => {
+            .addCase(getUsersByRoomId.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.error;
+            })
+            .addCase(addUserRoom.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(addUserRoom.fulfilled, (state, action) => {
+                state.loading = false;
+                state.users = [...state.users, ...action.payload.chat]
+            })
+            .addCase(addUserRoom.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.error;
             })

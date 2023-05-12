@@ -1,14 +1,11 @@
 import { Avatar, Space, Badge } from "antd";
-import classNames from "classnames/bind";
-import styles from './UserItem.module.scss'
+import '../../styles/_userItem.scss'
 
-const cx = classNames.bind(styles)
-
-function UserItem({ children }) {
+function UserItem({ children, isActive }) {
   return (
-    <div className={cx('user-item')}>
+    <div className='user-item'>
       <Space>
-          <Badge offset={[-4, 36]} dot color="green">
+          <Badge offset={[-4, 36]} dot status={isActive ? "success" : "default"}>
             <Avatar
                 style={{
                 background: "orange",

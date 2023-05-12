@@ -1,0 +1,6 @@
+@import "formInput";
+
+.room {
+    height: 100vh;
+    @include flex()
+}

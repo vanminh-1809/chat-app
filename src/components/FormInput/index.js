@@ -1,10 +1,7 @@
 import { Button, Form, Input } from "antd";
 import Card from "antd/es/card/Card";
-import styles from "./FormInput.module.scss";
-import classNames from "classnames/bind";
+import "../../styles/_formInput.scss";
 import { useState } from "react";
-
-const cx = classNames.bind(styles);
 
 function FormInput({ actionType, onSubmit, children }) {
   const rules = {
@@ -23,7 +20,7 @@ function FormInput({ actionType, onSubmit, children }) {
   };
 
   return (
-    <div className={cx("wrapper")}>
+    <div className="wrapper">
       <Card title="CONG CHAT APP" style={{ width: '35%', textAlign: 'center' }}>
         <Form
           name="basic"

@@ -10,7 +10,7 @@ function Register() {
   const navigate = useNavigate();
 
   const handleSignUp = (account) => {
-    dispatch(signUp(account)).then(() => navigate('/login'));
+    dispatch(signUp(account)).then(() => navigate('/'));
   }
 
   return (

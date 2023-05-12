@@ -10,7 +10,7 @@ function Login() {
   const navigate = useNavigate();
 
   const handleLogin = (account) => {
-    dispatch(login(account)).then(() => navigate('/'))
+    dispatch(login(account)).then(() => navigate('/room'))
   }
 
   return (

@@ -1,22 +1,24 @@
-import classNames from "classnames/bind";
-import styles from "./Chat.module.scss";
+import "../../styles/_chat.scss";
 import ChatBox from "../../components/ChatBox";
 import Sidebar from "../../components/Sidebar";
 import Message from "../../components/Message";
+import UserItem from "../../components/UserItem";
 import { useState, useRef, useEffect } from "react";
 import { io } from "socket.io-client";
+import { pushNotifications } from "./notification";
 // import { useSelector } from "react-redux";
-// import { Navigate } from "react-router-dom";
 
-const cx = classNames.bind(styles);
 const host = "http://localhost:3001";
 
 function Chat() {
 
-  // const token = useSelector((state) => state.auth.token)
+
+  // const users = useSelector((state) => state.user.users);
+
+  const [active, setActive] = useState(false);
 
   const [allMess, setAllMess] = useState([]);
-  const [id, setId] = useState()
+  const [id, setId] = useState(null)
 
   const socketRef = useRef();
   const messageEnd = useRef();
@@ -26,20 +28,24 @@ function Chat() {
 
     socketRef.current.on('getId', (data) => {
       setId(data)
+      setActive(true)
     })
 
-    socketRef.current.on('sendDataServer', (dataGot) => {
-      setAllMess(oldMess => [...oldMess, dataGot.data])
+    socketRef.current.on('sendDataServer', (data) => {
+      setAllMess(oldMess => [...oldMess, data])
       scrollToBottom()
+      if(data.id !== id && document.visibilityState !== 'hidden') {
+        pushNotifications(data.content)
+      }
     })
 
     return () => {
-      socketRef.current.disconnect()
+      socketRef.current.disconnect().on('out', () => setActive(false))
     }
   }, [])
 
   const sendMessage = (message) => {
-    if(message !== null) {
+    if(message !== '') {
       const msg = {
         content: message,
         id: id
@@ -56,10 +62,17 @@ function Chat() {
     return <Message className={ mess.id === id ? 'my-mess' : 'other-mess' } key={index} mess={mess.content}/>
   })
 
+  // const renderUser = allUsers.map((user, index) => {
+  //   return <UserItem key={index}>{user.userId}</UserItem>
+  // })
+
   return (
-    <div className={cx("wrapper")}>
-        <Sidebar style={{ height: '100%' }} />
-        <ChatBox onSend={sendMessage} style={{ width: '60%', height: '60%' }}>
+    <div className="background">
+        <Sidebar>
+          {/* {renderUser} */}
+          <UserItem isActive={active}>Cong</UserItem>
+        </Sidebar>
+        <ChatBox onSend={sendMessage}>
           { renderMessage }
           <div style={{ float: 'left', clear: 'both' }} ref={messageEnd}></div>
         </ChatBox>
