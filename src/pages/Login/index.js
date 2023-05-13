@@ -1,16 +1,20 @@
-
-import { useDispatch } from "react-redux";
 import FormInput from "../../components/FormInput";
 import { Link, useNavigate } from "react-router-dom";
-import { login } from "../../redux/slice/authSlice";
+import { login } from "./services";
 
 function Login() {
 
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleLogin = (account) => {
-    dispatch(login(account)).then(() => navigate('/room'))
+  const handleLogin = async (account) => {
+    try {
+      const res = await login(account);
+      localStorage.setItem('user', JSON.stringify(res.user));
+      localStorage.setItem('token', res.accessToken);
+      navigate('/room')
+    } catch (err) {
+      alert('Tai khoan mat khau chua dung')
+    }
   }
 
   return (

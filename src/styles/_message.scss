@@ -1,7 +1,7 @@
 @mixin mess($float, $color) {
     float: $float;
     clear: both;
-    margin: 5px 10px 15px 0;
+    margin: 2px 10px 0px 0;
     background-color: $color;
     padding: 5px 10px;
     border-radius: 15px;
@@ -10,9 +10,10 @@
 
 
 .my-mess {
-    @include mess(right, lightblue)
+    color: #fff;
+    @include mess(right, #3181fc)
 }
 
 .other-mess {
-    @include mess(left, #dad7d7)
+    @include mess(left, #e4e6eb)
 }

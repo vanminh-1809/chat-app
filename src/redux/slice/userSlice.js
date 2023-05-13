@@ -12,8 +12,8 @@ export const getUsersByRoomId = createAsyncThunk('users/getAll', async (id) => {
     return res.data;
 })
 
-export const addUserRoom = createAsyncThunk('users/add', async (id, data) => {
-    const res = await axios.put(`http://localhost:8081/api/chat/${id}`, data);
+export const addUserRoom = createAsyncThunk('users/add', async (data) => {
+    const res = await axios.put(`http://localhost:8081/api/chat/${data.id}`, data.data);
     return res.data;
 })
 
@@ -39,7 +39,10 @@ const userSlice = createSlice({
             })
             .addCase(addUserRoom.fulfilled, (state, action) => {
                 state.loading = false;
-                state.users = [...state.users, ...action.payload.chat]
+                const { arg: { id } } = action.meta;
+                if(id) {
+                    state.users = state.users.map((item) => item.id === id ? { ...action.payload } : item)
+                }
             })
             .addCase(addUserRoom.rejected, (state, action) => {
                 state.loading = false;

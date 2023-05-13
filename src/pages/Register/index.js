@@ -1,16 +1,19 @@
 import { Form, Input } from "antd";
 import FormInput from "../../components/FormInput";
-import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { signUp } from "../../redux/slice/authSlice";
+import { signUp } from "./services";
 
 function Register() {
 
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleSignUp = (account) => {
-    dispatch(signUp(account)).then(() => navigate('/'));
+  const handleSignUp = async (account) => {
+    try {
+      await signUp(account);
+      navigate('/');
+    } catch (err) {
+      alert('Mat khau chua chinh xac')
+    }
   }
 
   return (

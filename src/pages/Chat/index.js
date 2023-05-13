@@ -6,16 +6,18 @@ import UserItem from "../../components/UserItem";
 import { useState, useRef, useEffect } from "react";
 import { io } from "socket.io-client";
 import { pushNotifications } from "./notification";
-// import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { getUsersByRoomId } from "../../redux/slice/userSlice";
 
 const host = "http://localhost:3001";
 
 function Chat() {
+  const dispatch = useDispatch()
 
+  const users = useSelector((state) => state.user.users);
+  const thisUser = JSON.parse(localStorage.getItem('user'))
 
-  // const users = useSelector((state) => state.user.users);
-
-  const [active, setActive] = useState(false);
+  // const [active, setActive] = useState(false);
 
   const [allMess, setAllMess] = useState([]);
   const [id, setId] = useState(null)
@@ -26,21 +28,29 @@ function Chat() {
   useEffect(() => {
     socketRef.current = io.connect(host)
 
+    socketRef.current.emit('username', thisUser.id)
+    
+    socketRef.current.on('usernameConnected', (data) => {
+      dispatch(getUsersByRoomId(1))
+    })
+
     socketRef.current.on('getId', (data) => {
       setId(data)
-      setActive(true)
+      // setActive(true)
     })
+
 
     socketRef.current.on('sendDataServer', (data) => {
       setAllMess(oldMess => [...oldMess, data])
       scrollToBottom()
-      if(data.id !== id && document.visibilityState !== 'hidden') {
+      if(data.id !== id && document.visibilityState !== 'visible') {
         pushNotifications(data.content)
       }
     })
 
+
     return () => {
-      socketRef.current.disconnect().on('out', () => setActive(false))
+      socketRef.current.disconnect()
     }
   }, [])
 
@@ -48,7 +58,8 @@ function Chat() {
     if(message !== '') {
       const msg = {
         content: message,
-        id: id
+        id: id,
+        username: thisUser.username,
       }
       socketRef.current.emit('sendDataClient', msg)
     }
@@ -59,18 +70,17 @@ function Chat() {
   }
 
   const renderMessage = allMess.map((mess, index) => {
-    return <Message className={ mess.id === id ? 'my-mess' : 'other-mess' } key={index} mess={mess.content}/>
+    return <Message className={ mess.id === id ? 'my-mess' : 'other-mess' } key={index} mess={mess.content} />
   })
 
-  // const renderUser = allUsers.map((user, index) => {
-  //   return <UserItem key={index}>{user.userId}</UserItem>
-  // })
+  const renderUser = users.map((user) => {
+    return <UserItem key={user.userId}>{user.userId}</UserItem>
+  })
 
   return (
     <div className="background">
         <Sidebar>
-          {/* {renderUser} */}
-          <UserItem isActive={active}>Cong</UserItem>
+          {renderUser}
         </Sidebar>
         <ChatBox onSend={sendMessage}>
           { renderMessage }
