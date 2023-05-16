@@ -4,7 +4,8 @@ import axios from "axios";
 const initialState = {
     users: [],
     loading: false,
-    error: null
+    error: null,
+    status: {}
 }
 
 export const getUsersByRoomId = createAsyncThunk('users/getAll', async (id) => {
@@ -17,10 +18,14 @@ export const addUserRoom = createAsyncThunk('users/add', async (data) => {
     return res.data;
 })
 
-const userSlice = createSlice({
+export const updateAddress = createAsyncThunk('users/updateAddress', async (data) => {
+    const res = await axios.put(`http://localhost:8081/api/user/geoLocation/${data.id}`, data.data);
+    return res.data;
+})
+
+export const userSlice = createSlice({
     name: 'user',
     initialState,
-    reducers: {},
     extraReducers: (builder) => {
         builder
             .addCase(getUsersByRoomId.pending, (state) => {
@@ -28,12 +33,13 @@ const userSlice = createSlice({
             })
             .addCase(getUsersByRoomId.fulfilled, (state, action) => {
                 state.loading = false;
-                state.users = [...action.payload.chat];
+                state.users = [...action.payload.chat.Users]
             })
             .addCase(getUsersByRoomId.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.error;
             })
+            // add user
             .addCase(addUserRoom.pending, (state) => {
                 state.loading = true;
             })
@@ -48,7 +54,16 @@ const userSlice = createSlice({
                 state.loading = false;
                 state.error = action.error;
             })
+            // update address
+            .addCase(updateAddress.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(updateAddress.fulfilled, (state, action) => {
+                state.loading = false;
+            })
+            .addCase(updateAddress.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.error;
+            })
     }
 })
-
-export default userSlice;

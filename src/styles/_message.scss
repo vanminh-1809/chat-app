@@ -10,10 +10,22 @@
 
 
 .my-mess {
-    color: #fff;
-    @include mess(right, #3181fc)
+    
+    .username {
+        display: none;
+    }
+    .message {
+        color: #fff;
+        @include mess(right, #3181fc);
+    }
 }
 
 .other-mess {
-    @include mess(left, #e4e6eb)
+    .username {
+        float: left;
+        clear: both;
+    }
+    .message{
+        @include mess(left, #e4e6eb)
+    }
 }

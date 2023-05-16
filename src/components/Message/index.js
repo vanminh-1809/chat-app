@@ -1,9 +1,10 @@
 import "../../styles/_message.scss";
 
-function Message({ mess, className }) {
+function Message({ mess, className, username }) {
   return (
-    <div className={`${className} box-message`}>
-      <span className="message">{mess}</span>
+    <div className={`${className}`}>
+        <span className="username">{username}</span><br />
+        <span className="message">{mess}</span><br />
     </div>
   );
 }
