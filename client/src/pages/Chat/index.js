@@ -7,7 +7,7 @@ import { useState, useRef, useEffect } from "react";
 import { io } from "socket.io-client";
 import { pushNotifications } from "./notification";
 import { useDispatch, useSelector } from "react-redux";
-import { getUsersByRoomId } from "../../redux/slice/userSlice";
+import { getUsersByRoomId, statusOff, statusOn } from "../../redux/slice/userSlice";
 
 const host = "http://localhost:3001";
 
@@ -16,8 +16,6 @@ function Chat() {
 
   const users = useSelector((state) => state.user.users);
   const thisUser = JSON.parse(localStorage.getItem("user"));
-
-  const [active, setActive] = useState({});
 
   const [allMess, setAllMess] = useState([]);
   const [id, setId] = useState(null);
@@ -29,15 +27,19 @@ function Chat() {
     socketRef.current = io.connect(host);
 
     socketRef.current.on("getId", (data) => {
+      const status = {
+        id: thisUser.id,
+        data: { socketIdIn: data },
+      }
+      dispatch(statusOn(status))
       setId(data);
     });
-    socketRef.current.emit("username", thisUser.id);
-
+    socketRef.current.emit("username", thisUser.username);
+    
     socketRef.current.on("usernameConnected", (data) => {
       dispatch(getUsersByRoomId(1));
-      updateStatus(data, true);
     });
-
+    
     socketRef.current.on("sendDataServer", (data) => {
       setAllMess((oldMess) => [...oldMess, data]);
       scrollToBottom();
@@ -46,17 +48,16 @@ function Chat() {
       }
     });
 
+    socketRef.current.on("userOff", async (data) => {
+      const status = { socketIdOut: data }
+      await dispatch(statusOff(status))
+      dispatch(getUsersByRoomId(1));
+    })
+
     return () => {
       socketRef.current.disconnect();
     };
   }, []);
-
-  const updateStatus = (key, isActive) => {
-    setActive((prev) => ({
-      ...prev,
-      [key]: isActive,
-    }));
-  };
 
   const sendMessage = (message) => {
     if (message !== "") {
@@ -90,7 +91,7 @@ function Chat() {
         key={user.chatusermapping.userId}
         location={user.geoLocation}
         title={`${user.username} | ${user.geoLocation}`}
-        isActive={active[user.chatusermapping.userId]}
+        isActive={user.isActive}
       >
         {user.username}
       </UserItem>

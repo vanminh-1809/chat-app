@@ -15,7 +15,10 @@ socketIo.on("connection", (socket) => {
 
   socket.on('username', (data) => {
     console.log(data)
-    socketIo.emit('usernameConnected', data)
+    socketIo.emit('usernameConnected', {
+      userId: data,
+      socketId: socket.id
+    })
   })
 
   socket.emit("getId", socket.id);
@@ -27,6 +30,7 @@ socketIo.on("connection", (socket) => {
 
   socket.on("disconnect", () => {
     console.log("Client disconnected");
+    socketIo.emit("userOff", socket.id)
   });
 });
 

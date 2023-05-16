@@ -5,7 +5,6 @@ const initialState = {
     users: [],
     loading: false,
     error: null,
-    status: {}
 }
 
 export const getUsersByRoomId = createAsyncThunk('users/getAll', async (id) => {
@@ -20,6 +19,16 @@ export const addUserRoom = createAsyncThunk('users/add', async (data) => {
 
 export const updateAddress = createAsyncThunk('users/updateAddress', async (data) => {
     const res = await axios.put(`http://localhost:8081/api/user/geoLocation/${data.id}`, data.data);
+    return res.data;
+})
+
+export const statusOn = createAsyncThunk('users/statusOn', async (data) => {
+    const res = await axios.put(`http://localhost:8081/api/user/socketIn/${data.id}`, data.data)
+    return res.data;
+})
+
+export const statusOff = createAsyncThunk('users/statusOff', async (data) => {
+    const res = await axios.put(`http://localhost:8081/api/user/socketOut`, data)
     return res.data;
 })
 
@@ -45,10 +54,7 @@ export const userSlice = createSlice({
             })
             .addCase(addUserRoom.fulfilled, (state, action) => {
                 state.loading = false;
-                const { arg: { id } } = action.meta;
-                if(id) {
-                    state.users = state.users.map((item) => item.id === id ? { ...action.payload } : item)
-                }
+                state.users = [...action.payload.chat.Users]
             })
             .addCase(addUserRoom.rejected, (state, action) => {
                 state.loading = false;
@@ -58,12 +64,35 @@ export const userSlice = createSlice({
             .addCase(updateAddress.pending, (state) => {
                 state.loading = true;
             })
-            .addCase(updateAddress.fulfilled, (state, action) => {
+            .addCase(updateAddress.fulfilled, (state) => {
                 state.loading = false;
             })
             .addCase(updateAddress.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.error;
             })
+            // update status
+            .addCase(statusOn.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(statusOn.fulfilled, (state) => {
+                state.loading = false;
+            })
+            .addCase(statusOn.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.error;
+            })
+            // status off
+            .addCase(statusOff.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(statusOff.fulfilled, (state) => {
+                state.loading = false;
+            })
+            .addCase(statusOff.rejected, (state,action) => {
+                state.loading = false;
+                state.error = action.error;
+            })
+
     }
 })
