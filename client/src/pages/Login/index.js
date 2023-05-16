@@ -13,14 +13,14 @@ function Login() {
       localStorage.setItem('token', res.accessToken);
       navigate('/room')
     } catch (err) {
-      alert('Tai khoan mat khau chua dung')
+      alert('Tài khoản hoặc mật khẩu chưa chính xác')
     }
   }
 
   return (
     <div>
       <FormInput onSubmit={handleLogin} actionType="Đăng nhập">
-        <Link to="/register">Bạn chưa có tài khoản? Cùng đăng ký nhé!!</Link>
+        <Link to="/register">Bạn chưa có tài khoản? Cùng đăng ký nhé!!</Link><br/>
       </FormInput>
     </div>
   );

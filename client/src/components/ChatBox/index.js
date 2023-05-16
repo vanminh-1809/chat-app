@@ -1,7 +1,7 @@
 import { Input, Layout } from "antd";
 import { useState } from "react";
 import { SendOutlined } from "@ant-design/icons";
-import "../../styles/_chatBox.scss";
+import "../../styles/chatBox.scss";
 
 const { Content } = Layout;
 
@@ -13,7 +13,7 @@ function ChatBox({ children, onSend }) {
         setMessage(e.target.value)
     }
 
-    const handleSend = (e) => {
+    const handleSend = () => {
         onSend(message);
         setMessage('');
     }

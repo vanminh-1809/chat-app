@@ -12,7 +12,7 @@ function Register() {
       await signUp(account);
       navigate('/');
     } catch (err) {
-      alert('Mat khau chua chinh xac')
+      alert('Vui lòng xác nhận lại mật khẩu')
     }
   }
 

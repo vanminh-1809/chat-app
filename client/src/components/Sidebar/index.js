@@ -1,5 +1,5 @@
 import { Layout } from "antd";
-import "../../styles/_sidebar.scss";
+import "../../styles/sidebar.scss";
 
 const { Sider } = Layout;
 

@@ -1,7 +1,7 @@
 import { Avatar, Space, Badge, Tooltip } from "antd";
-import '../../styles/_userItem.scss'
+import '../../styles/userItem.scss'
 
-function UserItem({ children, isActive, location, title }) {
+function UserItem({ username, isActive, location, title }) {
   return (
     <div className='user-item'>
       <Space style={{ width:'100%' }}>
@@ -12,13 +12,11 @@ function UserItem({ children, isActive, location, title }) {
                 verticalAlign: "middle",
                 }}
                 size="large"
-            >
-                {/* C */}
-            </Avatar>
+            />
           </Badge>
           <Tooltip title={title}>
             <div style={{ width: '30%' }}>
-              {children}
+              <b>{username}</b>
               <p className="location">{location}</p>
             </div>
           </Tooltip>

@@ -1,7 +1,7 @@
 import { Button } from "antd";
 import { useNavigate } from "react-router-dom";
-import "../../styles/_room.scss"
-import { useDispatch, useSelector } from "react-redux";
+import "../../styles/room.scss"
+import { useDispatch } from "react-redux";
 import { addUserRoom, updateAddress } from "../../redux/slice/userSlice";
 import { getAddress } from "./services";
 import { useEffect } from "react";
@@ -28,7 +28,7 @@ function RoomOptions() {
                 }
                 dispatch(updateAddress(address));
             } catch (err) {
-                console.log('abc');
+                alert('Không có quyền truy cập vị trí');
             }
         })
     }, [])

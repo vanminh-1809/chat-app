@@ -1,4 +1,4 @@
-import "../../styles/_chat.scss";
+import "../../styles/chat.scss";
 import ChatBox from "../../components/ChatBox";
 import Sidebar from "../../components/Sidebar";
 import Message from "../../components/Message";
@@ -7,7 +7,11 @@ import { useState, useRef, useEffect } from "react";
 import { io } from "socket.io-client";
 import { pushNotifications } from "./notification";
 import { useDispatch, useSelector } from "react-redux";
-import { getUsersByRoomId, statusOff, statusOn } from "../../redux/slice/userSlice";
+import {
+  getUsersByRoomId,
+  statusOff,
+  statusOn,
+} from "../../redux/slice/userSlice";
 
 const host = "http://localhost:3001";
 
@@ -30,16 +34,16 @@ function Chat() {
       const status = {
         id: thisUser.id,
         data: { socketIdIn: data },
-      }
-      dispatch(statusOn(status))
+      };
+      dispatch(statusOn(status));
       setId(data);
     });
     socketRef.current.emit("username", thisUser.username);
-    
+
     socketRef.current.on("usernameConnected", (data) => {
       dispatch(getUsersByRoomId(1));
     });
-    
+
     socketRef.current.on("sendDataServer", (data) => {
       setAllMess((oldMess) => [...oldMess, data]);
       scrollToBottom();
@@ -48,11 +52,14 @@ function Chat() {
       }
     });
 
-    socketRef.current.on("userOff", async (data) => {
-      const status = { socketIdOut: data }
-      await dispatch(statusOff(status))
-      dispatch(getUsersByRoomId(1));
-    })
+    socketRef.current.on("userOff", (data) => {
+      const status = { socketIdOut: data };
+      dispatch(statusOff(status))
+        .then(() => {
+          dispatch(getUsersByRoomId(1));
+        })
+        .catch((err) => console.log(err));
+    });
 
     return () => {
       socketRef.current.disconnect();
@@ -92,9 +99,8 @@ function Chat() {
         location={user.geoLocation}
         title={`${user.username} | ${user.geoLocation}`}
         isActive={user.isActive}
-      >
-        {user.username}
-      </UserItem>
+        username={user.username}
+      />
     );
   });
   return (

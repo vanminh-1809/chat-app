@@ -1,6 +1,6 @@
 import { Button, Form, Input } from "antd";
 import Card from "antd/es/card/Card";
-import "../../styles/_formInput.scss";
+import "../../styles/formInput.scss";
 import { useState } from "react";
 
 function FormInput({ actionType, onSubmit, children }) {
@@ -38,7 +38,7 @@ function FormInput({ actionType, onSubmit, children }) {
           <Form.Item label="Password" name="password" rules={rules.password}>
             <Input.Password />
           </Form.Item>
-          {children}<br/>
+          {children}
             <Button
               type="primary"
               htmlType="submit"
